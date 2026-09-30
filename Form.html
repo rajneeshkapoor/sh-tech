@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base target="_top">
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #fdfaf0;
+      margin: 0;
+      padding: 16px;
+      color: #222;
+    }
+    .container { max-width: 560px; margin: 0 auto; }
+    .header {
+      background: #ffd400;
+      padding: 20px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    .header h1 { font-size: 20px; margin: 0 0 4px; }
+    .header p { font-size: 13px; margin: 0; color: #444; }
+    .section {
+      background: #fff;
+      border-radius: 10px;
+      padding: 18px;
+      margin-bottom: 16px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    }
+    .section h2 {
+      font-size: 15px;
+      margin: 0 0 14px;
+      color: #b8860b;
+      border-bottom: 2px solid #ffd400;
+      padding-bottom: 6px;
+    }
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      margin: 12px 0 4px;
+    }
+    .hint { font-weight: 400; color: #777; font-size: 12px; display: block; margin-top: 2px; }
+    input, select, textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: #ffb300;
+    }
+    .radio-group label, .checkbox-group label {
+      font-weight: 400;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 6px 0;
+    }
+    .radio-group input, .checkbox-group input { width: auto; }
+    .msg { font-size: 12px; margin-top: 4px; }
+    .msg.ok { color: #1a7d1a; }
+    .msg.err { color: #c0392b; }
+    button {
+      width: 100%;
+      padding: 14px;
+      background: #ffd400;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 8px;
+    }
+    button:disabled { opacity: 0.5; cursor: not-allowed; }
+    #successBox, #errorBox {
+      display: none;
+      padding: 16px;
+      border-radius: 8px;
+      text-align: center;
+      font-size: 15px;
+    }
+    #successBox { background: #e6f7e6; color: #1a7d1a; }
+    #errorBox { background: #fdecea; color: #c0392b; }
+    .required::after { content: " *"; color: #c0392b; }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <h1>🏔️ Sunday Hikers</h1>
+    <p>Member Registration Form</p>
+  </div>
+
+  <div id="successBox">
+    <strong>Welcome to the Sunday Hikers family! 🎉</strong><br>
+    Your Member ID is <strong id="memberIdDisplay"></strong>.<br>
+    Please save this ID — it will be used for merchandise booking and future reference.
+  </div>
+
+  <div id="errorBox"></div>
+
+  <form id="regForm">
+
+    <div class="section">
+      <h2>Reference Details</h2>
+      <label class="required">How did you hear about us?</label>
+      <select id="referralSource" required></select>
+
+      <label class="required">Referrer's Name</label>
+      <input type="text" id="referrerName" required>
+
+      <label class="required">Referrer's Contact Number
+        <span class="hint">Must match an existing Sunday Hikers member's number</span>
+      </label>
+      <input type="tel" id="referrerContact" required>
+      <div class="msg" id="referrerMsg"></div>
+    </div>
+
+    <div class="section">
+      <h2>Personal Details</h2>
+      <label class="required">First Name</label>
+      <input type="text" id="firstName" required>
+
+      <label class="required">Last Name</label>
+      <input type="text" id="lastName" required>
+
+      <label class="required">Gender</label>
+      <div class="radio-group">
+        <label><input type="radio" name="gender" value="FEMALE" required> Female</label>
+        <label><input type="radio" name="gender" value="MALE"> Male</label>
+      </div>
+
+      <label class="required">Date of Birth
+        <span class="hint">For admin use only — distinguishing Minors/Adults/Seniors. Not shared with other members.</span>
+      </label>
+      <input type="date" id="dob" required>
+
+      <label class="required">Contact Number (Mobile)</label>
+      <input type="tel" id="contactNumber" required>
+
+      <label class="required">WhatsApp Number</label>
+      <input type="tel" id="whatsAppNumber" required>
+
+      <label class="required">Email Address</label>
+      <input type="email" id="emailAddress" required>
+
+      <label class="required">Do you own a vehicle?
+        <span class="hint">For car-pooling coordination</span>
+      </label>
+      <select id="ownsVehicle" required>
+        <option value="">Select...</option>
+        <option>4 Wheeler</option><option>2 Wheeler</option><option>Both</option><option>None</option>
+      </select>
+
+      <label class="required">Do you drive a vehicle?</label>
+      <select id="drivesVehicle" required>
+        <option value="">Select...</option>
+        <option>4 Wheeler</option><option>2 Wheeler</option><option>Both</option><option>None</option>
+      </select>
+    </div>
+
+    <div class="section">
+      <h2>Location</h2>
+      <label class="required">Area Group</label>
+      <select id="areaGroup" required></select>
+
+      <label class="required">Sub Area</label>
+      <select id="subArea" required disabled>
+        <option value="">Select Area Group first</option>
+      </select>
+
+      <label class="required">Address
+        <span class="hint">Flat/Apartment No., Building Name</span>
+      </label>
+      <textarea id="address" rows="2" required></textarea>
+    </div>
+
+    <div class="section">
+      <h2>Emergency Details</h2>
+      <label class="required">Emergency Contact Name</label>
+      <input type="text" id="emergencyContactName" required>
+
+      <label class="required">Emergency Contact Number</label>
+      <input type="tel" id="emergencyContactNumber" required>
+
+      <label class="required">Blood Group</label>
+      <select id="bloodGroup" required></select>
+    </div>
+
+    <div class="section">
+      <h2>Consent</h2>
+      <div class="checkbox-group">
+        <label>
+          <input type="checkbox" id="consentGiven" required>
+          I agree to the terms and voluntarily participate in trekking activities, understanding the associated risks. (Full text same as current form.)
+        </label>
+      </div>
+    </div>
+
+    <button type="submit" id="submitBtn">Submit Registration</button>
+  </form>
+
+</div>
+
+<script>
+  let referrerValid = false;
+
+  google.script.run.withSuccessHandler(populateMeta).getFormMeta();
+
+  function populateMeta(meta) {
+    const referralSel = document.getElementById('referralSource');
+    meta.referralSources.forEach(s => referralSel.add(new Option(s, s)));
+
+    const areaSel = document.getElementById('areaGroup');
+    areaSel.add(new Option('Select Area Group...', ''));
+    Object.keys(meta.areaData).forEach(area => areaSel.add(new Option(area, area)));
+
+    const bloodSel = document.getElementById('bloodGroup');
+    bloodSel.add(new Option('Select Blood Group...', ''));
+    meta.bloodGroups.forEach(b => bloodSel.add(new Option(b, b)));
+
+    areaSel.addEventListener('change', () => {
+      const subSel = document.getElementById('subArea');
+      subSel.innerHTML = '';
+      const options = meta.areaData[areaSel.value] || [];
+      if (options.length === 0) {
+        subSel.disabled = true;
+        subSel.add(new Option('Select Area Group first', ''));
+        return;
+      }
+      subSel.disabled = false;
+      subSel.add(new Option('Select Sub Area...', ''));
+      options.forEach(o => subSel.add(new Option(o, o)));
+    });
+  }
+
+  // Live referrer validation, debounced
+  let referrerTimer;
+  document.getElementById('referrerContact').addEventListener('input', function() {
+    const val = this.value;
+    referrerValid = false;
+    clearTimeout(referrerTimer);
+    const msg = document.getElementById('referrerMsg');
+    if (val.replace(/\\D/g, '').length < 10) { msg.textContent = ''; return; }
+    msg.textContent = 'Checking...';
+    msg.className = 'msg';
+    referrerTimer = setTimeout(() => {
+      google.script.run.withSuccessHandler(res => {
+        if (res.valid) {
+          referrerValid = true;
+          msg.textContent = '✓ Matched: ' + res.name;
+          msg.className = 'msg ok';
+        } else {
+          referrerValid = false;
+          msg.textContent = '✗ No matching member found with this number.';
+          msg.className = 'msg err';
+        }
+      }).checkReferrerContact(val);
+    }, 500);
+  });
+
+  document.getElementById('regForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    if (!referrerValid) {
+      showError('Please enter a valid referrer contact number that matches an existing member.');
+      return;
+    }
+
+    const submitBtn = document.getElementById('submitBtn');
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Submitting...';
+
+    const formData = {
+      ReferralSource: document.getElementById('referralSource').value,
+      ReferrerName: document.getElementById('referrerName').value,
+      ReferrerContact: document.getElementById('referrerContact').value,
+      FirstName: document.getElementById('firstName').value,
+      LastName: document.getElementById('lastName').value,
+      Gender: document.querySelector('input[name="gender"]:checked') ? document.querySelector('input[name="gender"]:checked').value : '',
+      DOB: document.getElementById('dob').value,
+      ContactNumber: document.getElementById('contactNumber').value,
+      WhatsAppNumber: document.getElementById('whatsAppNumber').value,
+      EmailAddress: document.getElementById('emailAddress').value,
+      OwnsVehicle: document.getElementById('ownsVehicle').value,
+      DrivesVehicle: document.getElementById('drivesVehicle').value,
+      AreaGroup: document.getElementById('areaGroup').value,
+      SubArea: document.getElementById('subArea').value,
+      Address: document.getElementById('address').value,
+      EmergencyContactName: document.getElementById('emergencyContactName').value,
+      EmergencyContactNumber: document.getElementById('emergencyContactNumber').value,
+      BloodGroup: document.getElementById('bloodGroup').value,
+      consentGiven: document.getElementById('consentGiven').checked,
+    };
+
+    google.script.run
+      .withSuccessHandler(onSubmitSuccess)
+      .withFailureHandler(onSubmitFailure)
+      .submitRegistration(formData);
+  });
+
+  function onSubmitSuccess(res) {
+    const submitBtn = document.getElementById('submitBtn');
+    if (res.success) {
+      document.getElementById('regForm').style.display = 'none';
+      document.getElementById('memberIdDisplay').textContent = res.memberId;
+      document.getElementById('successBox').style.display = 'block';
+    } else {
+      showError(res.error);
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Submit Registration';
+    }
+  }
+
+  function onSubmitFailure(err) {
+    showError('Submission failed: ' + err.message);
+    const submitBtn = document.getElementById('submitBtn');
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Submit Registration';
+  }
+
+  function showError(text) {
+    const box = document.getElementById('errorBox');
+    box.textContent = text;
+    box.style.display = 'block';
+    window.scrollTo(0, 0);
+  }
+</script>
+</body>
+</html>
